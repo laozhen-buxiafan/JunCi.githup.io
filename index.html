@@ -1,0 +1,2656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="钧瓷艺术典藏网站 - 传承千年窑火，品味入窑一色出窑万彩的钧瓷之美。展示钧瓷精品、介绍烧制工艺、弘扬传统文化。">
+<meta name="keywords" content="钧瓷,陶瓷,窑变,五大名窑,河南禹州,传统工艺,瓷器收藏">
+<meta name="author" content="钧瓷艺术典藏">
+<meta property="og:title" content="钧瓷 - 千年窑火 盛世瑰宝">
+<meta property="og:description" content="入窑一色，出窑万彩 · 钧瓷艺术典藏">
+<meta property="og:type" content="website">
+<title>钧瓷 - 千年窑火 盛世瑰宝</title>
+<style>
+:root {
+  --bg-main: #0d0d18;
+  --bg-grad: linear-gradient(135deg, #0d0d18 0%, #1a1423 100%);
+  --text-white: #f8f8ff;
+  --text-gray: #c0c0d8;
+  --accent-red: #c41e3a;
+  --accent-gold: #d4a574;
+  --accent-blue: #4a7c9b;
+  --accent-grad: linear-gradient(90deg, #c41e3a, #d4a574);
+  --border: rgba(255,255,255,0.1);
+  --card-bg: rgba(255,255,255,0.05);
+  --nav-bg: rgba(13, 13, 24, 0.85);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg-grad);
+  color: var(--text-white);
+  line-height: 1.7;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* 星空画布 - 全屏底层 */
+#starCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 导航栏 */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  transition: background 0.3s ease;
+  z-index: 10;
+}
+.nav.active {
+  background: var(--nav-bg);
+  backdrop-filter: blur(8px);
+}
+.nav-logo {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding: 8px 16px;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  border-radius: 8px;
+  position: relative;
+}
+.nav-logo::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.4), rgba(212, 165, 116, 0.4));
+  border-radius: 10px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.nav-logo:hover::before {
+  opacity: 1;
+}
+.nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  gap: 40px;
+}
+.nav-links a {
+  color: var(--text-gray);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 8px 0;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent-grad);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+.nav-links a:hover {
+  color: var(--text-white);
+}
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* 首屏区域 */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+}
+h1 {
+  font-size: 48px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+.hero-gradient-text {
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero p {
+  color: var(--text-gray);
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+/* 按钮 */
+.btn {
+  background: var(--accent-grad);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(196, 30, 58, 0.5);
+}
+
+/* 内容区块 */
+.section {
+  padding: 80px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section h2 {
+  font-size: 28px;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 40px;
+}
+.card-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+.card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(212, 165, 116, 0.2);
+  border-radius: 16px;
+  padding: 36px 30px;
+  width: 360px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent-grad);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(196, 30, 58, 0.15), 0 0 0 1px rgba(212, 165, 116, 0.3);
+  border-color: rgba(212, 165, 116, 0.4);
+}
+.card:hover::before {
+  opacity: 1;
+}
+.card:hover::after {
+  opacity: 1;
+}
+.card-icon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.15) 0%, rgba(212, 165, 116, 0.15) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-gold);
+  transition: all 0.3s ease;
+}
+.card-icon svg {
+  width: 28px;
+  height: 28px;
+}
+.card:hover .card-icon {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.25) 0%, rgba(212, 165, 116, 0.25) 100%);
+}
+.card h3 {
+  font-size: 22px;
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: var(--text-white);
+  position: relative;
+  z-index: 1;
+}
+.card p {
+  color: var(--text-gray);
+  font-size: 15px;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+/* 图片展示卡片 */
+.gallery-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  width: 380px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.gallery-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 15px 40px rgba(196, 30, 58, 0.3);
+}
+.gallery-img-container {
+  width: 100%;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(13,13,24,0.5) 0%, rgba(26,20,35,0.5) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  padding: 20px;
+}
+.gallery-img-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, var(--bg-main) 100%);
+  pointer-events: none;
+}
+.gallery-info {
+  padding: 20px;
+}
+.gallery-info h3 {
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.gallery-info p {
+  color: var(--text-gray);
+  font-size: 14px;
+}
+
+/* 滚动渐入动画 */
+.fade-item {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-item.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 底部 */
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-gray);
+  font-size: 14px;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* ========== 工艺文化专题页面样式 ========== */
+
+/* 1. 顶部Banner区域 */
+.craft-banner {
+  position: relative;
+  height: 70vh;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-top: 60px;
+}
+
+.craft-banner-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  background: linear-gradient(135deg, rgba(13,13,24,0.7) 0%, rgba(26,20,35,0.8) 100%),
+              url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="craft" patternUnits="userSpaceOnUse" width="50" height="50"><circle cx="25" cy="25" r="1" fill="rgba(212,165,116,0.3)"/><circle cx="75" cy="75" r="1" fill="rgba(212,165,116,0.3)"/></pattern></defs><rect fill="url(%23craft)" width="100" height="100"/></svg>');
+  background-size: cover, 100px 100px;
+  will-change: transform;
+}
+
+.craft-banner-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 20px;
+  max-width: 800px;
+}
+
+.craft-banner h2 {
+  font-size: 48px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  color: var(--text-white);
+}
+
+.craft-banner .gradient-text {
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.craft-banner-desc {
+  font-size: 18px;
+  color: var(--text-gray);
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.craft-banner-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  background: var(--accent-grad);
+  color: #fff;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.craft-banner-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4);
+}
+
+/* 2. 历史溯源板块 */
+.craft-history {
+  padding: 100px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.craft-history .section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.craft-history .section-header h3 {
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  color: var(--text-white);
+}
+
+.craft-history .section-header p {
+  color: var(--text-gray);
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.craft-history-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.craft-history-img {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.craft-history-img:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(196, 30, 58, 0.25);
+}
+
+.craft-history-img img,
+.craft-history-img .img-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.craft-history-img:hover img {
+  transform: scale(1.05);
+}
+
+.img-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(196,30,58,0.1) 0%, rgba(212,165,116,0.1) 100%);
+  color: var(--accent-gold);
+  font-size: 48px;
+}
+
+.img-placeholder span {
+  font-size: 14px;
+  margin-top: 10px;
+  color: var(--text-gray);
+}
+
+.craft-history-text h4 {
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  color: var(--accent-gold);
+}
+
+.craft-history-text p {
+  color: var(--text-gray);
+  font-size: 16px;
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+
+/* 文字高亮样式 - 默认隐藏 */
+.highlight-text {
+  color: var(--accent-gold);
+  font-size: 17px;
+  font-weight: 500;
+  padding: 0 2px;
+  opacity: 0;
+}
+
+.highlight-quote {
+  color: #e8c4a0;
+  font-size: 18px;
+  font-weight: 500;
+  font-style: italic;
+  background: rgba(212, 165, 116, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  opacity: 0;
+}
+
+.highlight-number {
+  color: #ff6b6b;
+  font-size: 18px;
+  font-weight: 600;
+  opacity: 0;
+}
+
+.highlight-color {
+  color: var(--accent-red);
+  font-size: 17px;
+  font-weight: 500;
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.15), rgba(212, 165, 116, 0.15));
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0;
+}
+
+/* 当父元素显示时触发动画 */
+.fade-item.show .highlight-text {
+  animation: fadeInUp 0.6s ease forwards;
+  animation-delay: 0.38s;
+}
+
+.fade-item.show .highlight-quote {
+  animation: fadeInScale 0.8s ease forwards;
+  animation-delay: 0.58s;
+}
+
+.fade-item.show .highlight-number {
+  animation: fadeInBounce 0.7s ease forwards;
+  animation-delay: 0.48s;
+}
+
+.fade-item.show .highlight-color {
+  animation: fadeInColor 0.6s ease forwards;
+  animation-delay: 0.38s;
+}
+
+/* 文字动画定义 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInColor {
+  from {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 3. 烧制工艺流程板块 */
+.craft-process {
+  padding: 100px 20px;
+  background: rgba(255,255,255,0.02);
+}
+
+.craft-process .section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.craft-process .section-header h3 {
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  color: var(--text-white);
+}
+
+.craft-process .section-header p {
+  color: var(--text-gray);
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.process-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.process-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.process-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(196, 30, 58, 0.25);
+  border-color: rgba(196, 30, 58, 0.3);
+}
+
+.process-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, rgba(196,30,58,0.2) 0%, rgba(212,165,116,0.2) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: var(--accent-gold);
+  transition: all 0.3s ease;
+}
+
+.process-card:hover .process-icon {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, rgba(196,30,58,0.3) 0%, rgba(212,165,116,0.3) 100%);
+}
+
+.process-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 15px 0;
+  transition: transform 0.3s ease;
+}
+
+.process-card:hover .process-img {
+  transform: scale(1.05);
+}
+
+.process-card h4 {
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 12px;
+  color: var(--text-white);
+}
+
+.process-card p {
+  color: var(--text-gray);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* 工艺总图标记 */
+.craft-map {
+  position: relative;
+  max-width: 800px;
+  margin: 80px auto 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+}
+
+.craft-map-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: linear-gradient(135deg, rgba(13,13,24,0.9) 0%, rgba(26,20,35,0.9) 100%);
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-gold);
+  font-size: 64px;
+}
+
+.map-marker {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--accent-red);
+  border-radius: 50%;
+  cursor: pointer;
+  animation: breathe 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(196, 30, 58, 0.6);
+}
+
+.map-marker::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(196, 30, 58, 0.6);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(196, 30, 58, 0.8);
+  }
+}
+
+.map-marker:nth-child(1) { top: 20%; left: 15%; }
+.map-marker:nth-child(2) { top: 35%; left: 35%; animation-delay: 0.3s; }
+.map-marker:nth-child(3) { top: 50%; left: 55%; animation-delay: 0.6s; }
+.map-marker:nth-child(4) { top: 65%; left: 75%; animation-delay: 0.9s; }
+.map-marker:nth-child(5) { top: 80%; left: 45%; animation-delay: 1.2s; }
+
+.map-tooltip {
+  position: absolute;
+  background: rgba(13, 13, 24, 0.95);
+  border: 1px solid var(--accent-gold);
+  border-radius: 12px;
+  padding: 16px 20px;
+  min-width: 180px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.map-marker:hover .map-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.map-tooltip h5 {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+.map-tooltip p {
+  font-size: 13px;
+  color: var(--text-gray);
+  line-height: 1.6;
+}
+
+/* 4. 窑变美学板块 */
+.craft-aesthetics {
+  padding: 100px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.craft-aesthetics .section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.craft-aesthetics .section-header h3 {
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  color: var(--text-white);
+}
+
+.craft-aesthetics .section-header p {
+  color: var(--text-gray);
+  font-size: 16px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.aesthetics-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 50px;
+  padding: 30px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.aesthetics-intro h4 {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--accent-gold);
+  margin-bottom: 16px;
+}
+
+.aesthetics-intro p {
+  color: var(--text-gray);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.aesthetics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.aesthetics-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  background: var(--card-bg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.aesthetics-item:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 15px 40px rgba(196, 30, 58, 0.3);
+}
+
+.aesthetic-img {
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.aesthetics-item:hover .aesthetic-img {
+  transform: scale(1.08);
+}
+
+.aesthetics-item .item-img {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  color: var(--accent-gold);
+  transition: all 0.3s ease;
+}
+
+.aesthetics-item:hover .item-img {
+  transform: scale(1.1);
+}
+
+.aesthetics-item .item-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+}
+
+.aesthetics-item h5 {
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.aesthetics-item span {
+  font-size: 12px;
+  color: var(--accent-gold);
+}
+
+/* 响应式设计 */
+@media (max-width: 992px) {
+  .craft-history-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .craft-banner h2 {
+    font-size: 42px;
+    letter-spacing: 4px;
+  }
+  
+  .aesthetics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .craft-banner {
+    height: 60vh;
+    min-height: 400px;
+  }
+  
+  .craft-banner h2 {
+    font-size: 32px;
+    letter-spacing: 2px;
+  }
+  
+  .craft-banner-desc {
+    font-size: 15px;
+  }
+  
+  .craft-history,
+  .craft-process,
+  .craft-aesthetics {
+    padding: 60px 20px;
+  }
+  
+  .craft-history .section-header h3,
+  .craft-process .section-header h3,
+  .craft-aesthetics .section-header h3 {
+    font-size: 28px;
+  }
+  
+  .process-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .aesthetics-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  
+  .map-marker {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .map-marker::before {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .process-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .aesthetics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 图片懒加载样式 */
+.lazy-img {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.lazy-img.loaded {
+  opacity: 1;
+}
+
+/* ========== 图片放大镜功能样式 ========== */
+
+/* 放大镜容器 */
+.magnifier-container {
+  position: relative;
+  cursor: zoom-in;
+  overflow: hidden;
+}
+
+/* 放大镜遮罩提示 */
+.magnifier-hint {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
+.magnifier-container:hover .magnifier-hint {
+  opacity: 1;
+}
+
+/* 放大窗口 */
+.magnifier-window {
+  position: fixed;
+  width: 280px;
+  height: 280px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: rgba(13, 13, 24, 0.95);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  display: none;
+}
+
+.magnifier-window.show {
+  display: block;
+  opacity: 1;
+}
+
+/* 放大窗口内的图片 */
+.magnifier-image {
+  position: absolute;
+  width: 250%;
+  height: 250%;
+  background-size: cover;
+  background-position: center;
+}
+
+/* 移动端全屏预览遮罩 */
+.image-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.image-preview-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 全屏预览图片 */
+.image-preview-img {
+  max-width: 90%;
+  max-height: 90%;
+  transform-origin: center center;
+  transition: transform 0.1s ease;
+}
+
+/* 关闭按钮 */
+.image-preview-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.image-preview-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* 缩放提示 */
+.image-preview-hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  backdrop-filter: blur(4px);
+}
+
+/* 图片加载动画 */
+.image-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(212, 165, 116, 0.3);
+  border-top-color: #d4a574;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* 图片加载完成后隐藏加载动画 */
+.magnifier-container.loaded .image-loading {
+  display: none;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .magnifier-hint {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}
+
+/* ========== 移动端汉堡菜单样式 ========== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 100;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--text-white);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+    padding: 40px;
+    transition: right 0.3s ease;
+    border-left: 1px solid var(--border);
+  }
+  
+  .nav-links.active {
+    right: 0;
+  }
+  
+  .nav-links a {
+    font-size: 18px;
+  }
+  
+  .nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 90;
+  }
+  
+  .nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* ========== 关于我们板块样式 ========== */
+.about-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-text {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.about-text p {
+  color: var(--text-gray);
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.about-values {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.value-item {
+  text-align: center;
+  padding: 32px 36px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(212, 165, 116, 0.15);
+  border-radius: 16px;
+  min-width: 160px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.value-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent-grad);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.value-item:hover {
+  transform: translateY(-8px);
+  border-color: rgba(212, 165, 116, 0.4);
+  box-shadow: 0 16px 32px rgba(196, 30, 58, 0.12);
+}
+
+.value-item:hover::before {
+  opacity: 1;
+}
+
+.value-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.12) 0%, rgba(212, 165, 116, 0.12) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-gold);
+  transition: all 0.3s ease;
+}
+
+.value-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.value-item:hover .value-icon {
+  transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.2) 0%, rgba(212, 165, 116, 0.2) 100%);
+}
+
+.value-item h4 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-white);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.value-item p {
+  color: var(--text-gray);
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== 联系我们板块样式 ========== */
+.contact-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 50px;
+  align-items: start;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+  border-color: var(--accent-gold);
+}
+
+.contact-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.contact-item h4 {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+}
+
+.contact-item p {
+  color: var(--text-gray);
+  font-size: 14px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-white);
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: var(--text-gray);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+@media (max-width: 768px) {
+  .about-values {
+    gap: 20px;
+  }
+  
+  .value-item {
+    padding: 20px 24px;
+    min-width: 140px;
+  }
+  
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* ========== 新版页脚样式 ========== */
+footer {
+  background: rgba(13, 13, 24, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 60px 20px 30px;
+  margin-top: 60px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-left {
+  flex: 1;
+  max-width: 280px;
+}
+
+.footer-logo {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 16px;
+}
+
+.footer-copyright {
+  color: var(--text-gray);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.footer-links {
+  flex: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+.footer-column h4 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-white);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 12px;
+}
+
+.footer-column a {
+  color: var(--text-gray);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.footer-column a:hover {
+  color: var(--accent-gold);
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 24px;
+}
+
+.footer-bottom p {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 992px) {
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .footer-left {
+    max-width: 100%;
+  }
+  
+  .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  footer {
+    padding: 40px 20px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-bottom p {
+    font-size: 11px;
+    line-height: 1.8;
+  }
+}
+</style>
+</head>
+<body>
+<!-- 星空背景画布 -->
+<canvas id="starCanvas"></canvas>
+
+<!-- 导航栏 -->
+<div class="nav">
+  <div class="nav-logo">钧瓷</div>
+  <div class="nav-links">
+    <a href="#gallery">作品展示</a>
+    <a href="#craftProcess">工艺传承</a>
+    <a href="#about">关于我们</a>
+    <a href="#contact">联系我们</a>
+  </div>
+  <!-- 汉堡菜单按钮 -->
+  <button class="hamburger" id="hamburger" aria-label="菜单">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</div>
+
+<!-- 首屏 -->
+<div class="hero fade-item">
+  <h1>千年窑火<br><span class="hero-gradient-text">盛世瑰宝</span></h1>
+  <p>入窑一色，出窑万彩 · 钧瓷艺术典藏</p>
+  <button class="btn" id="exploreBtn">探索精品</button>
+</div>
+
+<!-- 图片展示板块 -->
+<div class="section" id="gallery">
+  <h2 class="fade-item">精品典藏</h2>
+  <div class="card-wrap">
+    <div class="gallery-card fade-item">
+      <div class="gallery-img-container magnifier-container">
+        <img class="gallery-img" src="images/01%20.png" alt="钧瓷作品-毛毛纹理" data-magnifier-src="images/01%20.png">
+        <div class="image-loading"></div>
+        <div class="magnifier-hint">悬停查看细节</div>
+      </div>
+      <div class="gallery-info">
+        <h3>毛毛</h3>
+        <p>毛绒质感，温馨可爱</p>
+      </div>
+    </div>
+    <div class="gallery-card fade-item">
+      <div class="gallery-img-container magnifier-container">
+        <img class="gallery-img" src="images/02.png" alt="钧瓷作品-精巧别致" data-magnifier-src="images/02.png">
+        <div class="image-loading"></div>
+        <div class="magnifier-hint">悬停查看细节</div>
+      </div>
+      <div class="gallery-info">
+        <h3>包包</h3>
+        <p>精巧别致，匠心独运</p>
+      </div>
+    </div>
+    <div class="gallery-card fade-item">
+      <div class="gallery-img-container magnifier-container">
+        <img class="gallery-img" src="images/03.png" alt="钧瓷作品-国色天香" data-magnifier-src="images/03.png">
+        <div class="image-loading"></div>
+        <div class="magnifier-hint">悬停查看细节</div>
+      </div>
+      <div class="gallery-info">
+        <h3>牡丹</h3>
+        <p>国色天香，富贵吉祥</p>
+      </div>
+    </div>
+    <div class="gallery-card fade-item">
+      <div class="gallery-img-container magnifier-container">
+        <img class="gallery-img" src="images/04.png" alt="钧瓷作品-色彩斑斓" data-magnifier-src="images/04.png">
+        <div class="image-loading"></div>
+        <div class="magnifier-hint">悬停查看细节</div>
+      </div>
+      <div class="gallery-info">
+        <h3>烩烩</h3>
+        <p>色彩斑斓，浑然天成</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 全屏预览遮罩 -->
+<div class="image-preview-overlay" id="imagePreview">
+  <button class="image-preview-close" id="previewClose">×</button>
+  <img class="image-preview-img" id="previewImg" src="" alt="预览图片">
+  <div class="image-preview-hint">双指缩放查看细节</div>
+</div>
+
+<!-- 放大镜窗口 -->
+<div class="magnifier-window" id="magnifierWindow">
+  <div class="magnifier-image" id="magnifierImage"></div>
+</div>
+
+<!-- ========== 工艺文化专题页面 ========== -->
+
+<!-- 1. 顶部Banner区域 -->
+<section class="craft-banner" id="craftBanner">
+  <div class="craft-banner-bg" id="bannerBg"></div>
+  <div class="craft-banner-content fade-item">
+    <h2>千年窑火<br><span class="gradient-text">匠心传承</span></h2>
+    <p class="craft-banner-desc">
+      从唐宋的炉火中走来，钧瓷以"入窑一色，出窑万彩"的神奇窑变<br>
+      诠释着东方美学的极致韵味。每一道工序，都凝聚着匠人的智慧与心血。
+    </p>
+    <a href="#craftHistory" class="craft-banner-btn">探索工艺</a>
+  </div>
+</section>
+
+<!-- 2. 历史溯源板块 -->
+<section class="craft-history" id="craftHistory">
+  <div class="section-header fade-item">
+    <h3>历史溯源</h3>
+    <p>追溯千年窑火，品味钧瓷文化的深厚底蕴</p>
+  </div>
+  
+  <div class="craft-history-grid">
+    <div class="craft-history-img fade-item">
+      <img src="images/0.5.01.jpeg" alt="宋代钧窑遗址" class="history-img">
+    </div>
+    <div class="craft-history-text fade-item">
+      <h4>始于唐 · 盛于宋</h4>
+      <p>
+        钧瓷始于唐代钧窑，历经千年发展，在<span class="highlight-text">宋代</span>达到<span class="highlight-text">鼎盛</span>。宋徽宗年间，钧瓷被封为"<span class="highlight-text">神钧宝瓷</span>"，成为宫廷御用珍品，与汝、官、哥、定并称<span class="highlight-text">宋代五大名窑</span>。
+      </p>
+      <p>
+        钧瓷以其独特的<span class="highlight-text">窑变艺术</span>著称于世，打破了"南青北白"的瓷器格局，开创了<span class="highlight-text">彩瓷艺术</span>的先河。每一件钧瓷都是<span class="highlight-text">泥土与火焰</span>的结晶，是<span class="highlight-text">自然与人工</span>的完美融合。
+      </p>
+      <p>
+        "<span class="highlight-quote">家有黄金万两，不如钧瓷一片</span>"，这句民间谚语道出了钧瓷的<span class="highlight-text">珍贵与难得</span>。钧瓷不仅是一件艺术品，更是<span class="highlight-text">中华文明</span>的重要组成部分，承载着深厚的文化内涵。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. 烧制工艺流程板块 -->
+<section class="craft-process" id="craftProcess">
+  <div class="section-header fade-item">
+    <h3>烧制工艺</h3>
+    <p>七十二道工序，道道精益求精</p>
+  </div>
+  
+  <div class="process-cards">
+    <div class="process-card fade-item">
+      <div class="process-icon">选料</div>
+      <img src="images/1.01 (6).jpeg" alt="选料" class="process-img">
+      <h4>选料</h4>
+      <p>精选禹州特产粘土，剔除杂质，精心配比，为钧瓷奠定品质基础。</p>
+    </div>
+    <div class="process-card fade-item">
+      <div class="process-icon">练泥</div>
+      <img src="images/1.01 (5).jpeg" alt="练泥" class="process-img">
+      <h4>练泥</h4>
+      <p>反复揉练，排出空气，使泥料细腻柔韧，利于拉坯成型。</p>
+    </div>
+    <div class="process-card fade-item">
+      <div class="process-icon">拉坯</div>
+      <img src="images/1.01 (4).jpeg" alt="拉坯" class="process-img">
+      <h4>拉坯</h4>
+      <p>凭借精湛手艺，将泥团拉成各式器型，赋予钧瓷最初的生命形态。</p>
+    </div>
+    <div class="process-card fade-item">
+      <div class="process-icon">施釉</div>
+      <img src="images/1.01 (1).jpeg" alt="施釉" class="process-img">
+      <h4>施釉</h4>
+      <p>采用独特配方的窑变釉料，层层施釉，为窑变提供可能。</p>
+    </div>
+    <div class="process-card fade-item">
+      <div class="process-icon">窑烧</div>
+      <img src="images/1.01 (3).jpeg" alt="窑烧" class="process-img">
+      <h4>窑烧</h4>
+      <p>1300°C高温淬炼，历经数十小时，釉色在烈火中孕育蜕变。</p>
+    </div>
+    <div class="process-card fade-item">
+      <div class="process-icon">开窑</div>
+      <img src="images/1.01 (2).jpeg" alt="开窑" class="process-img">
+      <h4>开窑</h4>
+      <p>冷却后开窑，揭晓窑变成果，每一件都是独一无二的孤品。</p>
+    </div>
+  </div>
+  
+  <!-- 工艺总图（带呼吸动画标记点） -->
+  <div class="craft-map fade-item">
+    <!-- 标记点1：选料 -->
+    <div class="map-marker">
+      <div class="map-tooltip" style="bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-10px);">
+        <h5>第一步：选料</h5>
+        <p>精选禹州神垕镇特有孔雀岩、玛瑙岩等矿物原料</p>
+      </div>
+    </div>
+    <!-- 标记点2：练泥 -->
+    <div class="map-marker">
+      <div class="map-tooltip" style="bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-10px);">
+        <h5>第二步：练泥</h5>
+        <p>采用千锤百炼的古法练泥技艺</p>
+      </div>
+    </div>
+    <!-- 标记点3：拉坯 -->
+    <div class="map-marker">
+      <div class="map-tooltip" style="bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-10px);">
+        <h5>第三步：拉坯</h5>
+        <p>手工拉坯，一气呵成</p>
+      </div>
+    </div>
+    <!-- 标记点4：施釉 -->
+    <div class="map-marker">
+      <div class="map-tooltip" style="bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-10px);">
+        <h5>第四步：施釉</h5>
+        <p>独特的挂釉技法，层层叠加</p>
+      </div>
+    </div>
+    <!-- 标记点5：窑烧 -->
+    <div class="map-marker">
+      <div class="map-tooltip" style="bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-10px);">
+        <h5>第五步：窑烧</h5>
+        <p>还原火烧，温度高达1300度</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. 窑变美学板块 -->
+<section class="craft-aesthetics" id="craftAesthetics">
+  <div class="section-header fade-item">
+    <h3>窑变美学</h3>
+    <p>入窑一色，出窑万彩 —— 钧瓷的色彩哲学</p>
+  </div>
+  
+  <div class="aesthetics-intro fade-item">
+    <h4>窑变之妙</h4>
+    <p>
+      钧瓷的<span class="highlight-text">窑变</span>是瓷器史上的<span class="highlight-text">奇迹</span>。在<span class="highlight-number">1300°C</span>的高温下，铜、铁、钛等金属氧化物发生化学反应，<br>
+      呈现出<span class="highlight-color">天青</span>、<span class="highlight-color">月白</span>、<span class="highlight-color">玫瑰紫</span>、<span class="highlight-color">海棠红</span>等绚烂色彩。同一配方、同一个窑位，<br>
+      烧出的瓷器却<span class="highlight-text">绝无相同</span>，正如"<span class="highlight-quote">世界上没有两片完全相同的树叶</span>"。
+    </p>
+  </div>
+  
+  <div class="aesthetics-grid">
+    <a href="detail.html?color=0" class="aesthetics-item fade-item">
+      <img src="images/2.01.jpeg" alt="天青色" class="aesthetic-img">
+      <div class="item-info">
+        <h5>天青色</h5>
+        <span>雨过天青云破处</span>
+      </div>
+    </a>
+    <a href="detail.html?color=1" class="aesthetics-item fade-item">
+      <img src="images/2.02.jpeg" alt="月白色" class="aesthetic-img">
+      <div class="item-info">
+        <h5>月白色</h5>
+        <span>清辉如水月当空</span>
+      </div>
+    </a>
+    <a href="detail.html?color=2" class="aesthetics-item fade-item">
+      <img src="images/2.03.jpeg" alt="玫瑰紫" class="aesthetic-img">
+      <div class="item-info">
+        <h5>玫瑰紫</h5>
+        <span>紫中带红艳若玫瑰</span>
+      </div>
+    </a>
+    <a href="detail.html?color=3" class="aesthetics-item fade-item">
+      <img src="images/2.04.jpeg" alt="海棠红" class="aesthetic-img">
+      <div class="item-info">
+        <h5>海棠红</h5>
+        <span>红艳如春晓海棠</span>
+      </div>
+    </a>
+    <a href="detail.html?color=4" class="aesthetics-item fade-item">
+      <img src="images/2.05.jpeg" alt="茄皮紫" class="aesthetic-img">
+      <div class="item-info">
+        <h5>茄皮紫</h5>
+        <span>紫中透青若茄皮</span>
+      </div>
+    </a>
+    <a href="detail.html?color=5" class="aesthetics-item fade-item">
+      <img src="images/2.06.png" alt="鹦哥绿" class="aesthetic-img">
+      <div class="item-info">
+        <h5>鹦哥绿</h5>
+        <span>绿中闪黄若鹦羽</span>
+      </div>
+    </a>
+    <a href="detail.html?color=6" class="aesthetics-item fade-item">
+      <img src="images/2.07.jpeg" alt="窑变彩" class="aesthetic-img">
+      <div class="item-info">
+        <h5>窑变彩</h5>
+        <span>彩霞漫天如画卷</span>
+      </div>
+    </a>
+    <a href="detail.html?color=7" class="aesthetics-item fade-item">
+      <img src="images/2.08.jpeg" alt="冰裂纹" class="aesthetic-img">
+      <div class="item-info">
+        <h5>冰裂纹</h5>
+        <span>釉面开片若冰裂</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- 内容板块 -->
+<div class="section">
+  <h2 class="fade-item">钧瓷特色</h2>
+  <div class="card-wrap">
+    <div class="card fade-item">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+      </div>
+      <h3>入窑一色</h3>
+      <p>素胎入窑，静待窑火淬炼，神秘莫测</p>
+    </div>
+    <div class="card fade-item">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+      <h3>出窑万彩</h3>
+      <p>窑变天成，独一无二，每一件都是孤品</p>
+    </div>
+    <div class="card fade-item">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 8v4l3 3"/>
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h2M20 12h2M12 2v2M12 20v2"/>
+        </svg>
+      </div>
+      <h3>千年传承</h3>
+      <p>始于唐，盛于宋，传承千年的匠心工艺</p>
+    </div>
+  </div>
+</div>
+
+<!-- 关于我们板块 -->
+<section class="section" id="about">
+  <h2 class="fade-item">关于我们</h2>
+  <div class="about-content fade-item">
+    <div class="about-text">
+      <p>我们致力于传承和发扬钧瓷这一中华传统艺术瑰宝。钧瓷始于唐代，历经千年发展，以其独特的窑变艺术著称于世。</p>
+      <p>每一件钧瓷都凝聚着匠人的智慧与心血，是泥土与火焰的结晶。我们希望通过这个平台，让更多人了解和欣赏钧瓷的魅力。</p>
+    </div>
+    <div class="about-values">
+      <div class="value-item">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h4>传承</h4>
+        <p>延续千年窑火</p>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        </div>
+        <h4>匠心</h4>
+        <p>精益求精工艺</p>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+        </div>
+        <h4>创新</h4>
+        <p>传统与现代融合</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 联系我们板块 -->
+<section class="section" id="contact">
+  <h2 class="fade-item">联系我们</h2>
+  <div class="contact-content fade-item">
+    <div class="contact-info">
+      <div class="contact-item">
+        <span class="contact-icon">📍</span>
+        <div>
+          <h4>地址</h4>
+          <p>河南省禹州市神垕镇</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">📞</span>
+        <div>
+          <h4>电话</h4>
+          <p>0374-16627687957</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">✉️</span>
+        <div>
+          <h4>邮箱</h4>
+          <p>info@junci.com</p>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" id="contactForm">
+      <input type="text" placeholder="您的姓名" required>
+      <input type="email" placeholder="您的邮箱" required>
+      <textarea placeholder="请输入您的留言..." rows="4" required></textarea>
+      <button type="submit" class="btn">提交留言</button>
+    </form>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="fade-item">
+  <div class="footer-content">
+    <div class="footer-left">
+      <div class="footer-logo">钧瓷</div>
+      <p class="footer-copyright">© 2026 钧瓷艺术典藏 版权所有</p>
+    </div>
+    
+    <div class="footer-links">
+      <div class="footer-column">
+        <h4>作品展示</h4>
+        <ul>
+          <li><a href="#gallery">精品典藏</a></li>
+          <li><a href="#craftAesthetics">窑变美学</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>工艺传承</h4>
+        <ul>
+          <li><a href="#craftHistory">历史溯源</a></li>
+          <li><a href="#craftProcess">烧制工艺</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>关于我们</h4>
+        <ul>
+          <li><a href="#about">品牌故事</a></li>
+          <li><a href="#contact">联系我们</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>© 2026 钧瓷艺术典藏 | 豫ICP备XXXXXXXX号 | 豫公网安备XXXXXXXXXXX号 | 营业执照</p>
+  </div>
+</footer>
+
+<script>
+// 1. 星空粒子动画
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+// 适配画布大小
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  createStars();
+}
+
+// 生成星星
+function createStars() {
+  stars = [];
+  const count = Math.floor((canvas.width * canvas.height) / 8000);
+  for(let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.2 + 0.2,
+      speed: Math.random() * 0.15
+    });
+  }
+}
+
+// 绘制星星
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#fff';
+  stars.forEach(star => {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+    ctx.fill();
+    star.y += star.speed;
+    if(star.y > canvas.height) {
+      star.y = 0;
+      star.x = Math.random() * canvas.width;
+    }
+  });
+  requestAnimationFrame(drawStars);
+}
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// 星空动画性能优化 - 页面不可见时暂停
+(function() {
+  let animationId = null;
+  let isRunning = true;
+  
+  function animate() {
+    if (isRunning) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#fff';
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx.fill();
+        star.y += star.speed;
+        if(star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+      });
+      animationId = requestAnimationFrame(animate);
+    }
+  }
+  
+  animate();
+  
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      isRunning = false;
+      cancelAnimationFrame(animationId);
+    } else {
+      isRunning = true;
+      animate();
+    }
+  });
+})();
+
+// 2. 导航栏滚动变色
+const nav = document.querySelector('.nav');
+window.addEventListener('scroll', () => {
+  if(window.scrollY > 50) {
+    nav.classList.add('active');
+  } else {
+    nav.classList.remove('active');
+  }
+});
+
+// 3. 滚动渐入动画
+const fadeItems = document.querySelectorAll('.fade-item');
+function checkFade() {
+  fadeItems.forEach(item => {
+    const rect = item.getBoundingClientRect();
+    if(rect.top < window.innerHeight * 0.85) {
+      item.classList.add('show');
+    }
+  });
+}
+window.addEventListener('scroll', checkFade);
+window.addEventListener('load', checkFade);
+
+// ========== 工艺文化专题页面交互功能 ==========
+
+/**
+ * 1. Banner视差滚动效果
+ * 滚动时背景图片移动速度较慢，产生深度感
+ */
+(function() {
+  const banner = document.getElementById('craftBanner');
+  const bannerBg = document.getElementById('bannerBg');
+  
+  if (!banner || !bannerBg) return;
+  
+  function updateParallax() {
+    const scrollY = window.scrollY;
+    const bannerTop = banner.offsetTop;
+    const bannerHeight = banner.offsetHeight;
+    
+    // 计算当前滚动位置相对于banner顶部的距离
+    const relativeScroll = scrollY - bannerTop;
+    
+    // 只有当banner在视口内时才应用视差效果
+    if (scrollY + window.innerHeight > bannerTop && scrollY < bannerTop + bannerHeight) {
+      // 背景移动速度为滚动速度的0.4倍
+      const parallaxOffset = relativeScroll * 0.4;
+      bannerBg.style.transform = `translateY(${parallaxOffset}px)`;
+    }
+  }
+  
+  window.addEventListener('scroll', updateParallax);
+  updateParallax();
+})();
+
+/**
+ * 2. 平滑滚动到锚点
+ * 点击"探索工艺"按钮时平滑滚动到对应板块
+ */
+(function() {
+  const smoothScrollLinks = document.querySelectorAll('a[href^="#"]');
+  
+  smoothScrollLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#') return;
+      
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        const headerOffset = 80;
+        const elementPosition = target.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+})();
+
+/**
+ * 3. 图片懒加载功能
+ * 当图片进入视口时才加载，提高页面性能
+ */
+(function() {
+  // 获取所有需要懒加载的图片（带有lazy-src属性的图片）
+  const lazyImages = document.querySelectorAll('img[data-src]');
+  
+  if (lazyImages.length === 0) return;
+  
+  // 使用IntersectionObserver检测图片是否进入视口
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const src = img.getAttribute('data-src');
+          
+          if (src) {
+            img.src = src;
+            img.removeAttribute('data-src');
+            img.classList.add('loaded');
+          }
+          
+          observer.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '50px 0px',
+      threshold: 0.1
+    });
+    
+    lazyImages.forEach(img => imageObserver.observe(img));
+  } else {
+    // 降级处理：直接加载所有图片
+    lazyImages.forEach(img => {
+      img.src = img.getAttribute('data-src');
+      img.removeAttribute('data-src');
+      img.classList.add('loaded');
+    });
+  }
+})();
+
+/**
+ * 4. 工序卡片点击高亮效果
+ * 点击工序卡片时添加高亮状态
+ */
+(function() {
+  const processCards = document.querySelectorAll('.process-card');
+  
+  processCards.forEach(card => {
+    card.addEventListener('click', function() {
+      // 移除其他卡片的高亮
+      processCards.forEach(c => c.classList.remove('active'));
+      // 添加当前卡片的高亮
+      this.classList.add('active');
+    });
+  });
+})();
+
+/**
+ * 5. 窑变美学网格图片点击放大预览
+ */
+(function() {
+  const aestheticsItems = document.querySelectorAll('.aesthetics-item');
+  
+  aestheticsItems.forEach(item => {
+    item.addEventListener('click', function() {
+      const title = this.querySelector('h5')?.textContent || '';
+      const subtitle = this.querySelector('span')?.textContent || '';
+      
+      // 可以在这里添加显示详情模态框的逻辑
+      console.log(`查看详情: ${title} - ${subtitle}`);
+    });
+  });
+})();
+
+/**
+ * 6. 导航链接高亮当前板块
+ * 滚动时自动高亮对应的导航链接
+ */
+(function() {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  
+  function updateActiveNav() {
+    const scrollY = window.scrollY;
+    
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      const sectionHeight = section.offsetHeight;
+      const sectionId = section.getAttribute('id');
+      
+      if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${sectionId}`) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }
+  
+  window.addEventListener('scroll', updateActiveNav);
+  updateActiveNav();
+})();
+
+// ========== 图片放大镜功能模块 ==========
+(function() {
+  // 检测是否为移动端
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+  // DOM元素
+  const magnifierWindow = document.getElementById('magnifierWindow');
+  const magnifierImage = document.getElementById('magnifierImage');
+  const imagePreview = document.getElementById('imagePreview');
+  const previewImg = document.getElementById('previewImg');
+  const previewClose = document.getElementById('previewClose');
+  
+  // 放大倍数
+  const zoomFactor = 2.5;
+  
+  // 放大窗口尺寸
+  const windowSize = 280;
+  
+  // 当前活动的容器和图片引用
+  let currentContainer = null;
+  let currentImg = null;
+  
+  // 长按计时器
+  let longPressTimer = null;
+  let longPressThreshold = 500; // 长按阈值（毫秒）
+  
+  // 双指缩放相关变量
+  let initialDistance = 0;
+  let initialScale = 1;
+  let currentScale = 1;
+  
+  /**
+   * 初始化放大镜功能
+   */
+  function initMagnifier() {
+    // 获取所有放大镜容器
+    const containers = document.querySelectorAll('.magnifier-container');
+    
+    containers.forEach((container, index) => {
+      const img = container.querySelector('.gallery-img');
+      
+      // 图片加载完成后隐藏加载动画
+      img.addEventListener('load', function() {
+        container.classList.add('loaded');
+      });
+      
+      // 如果图片已缓存，直接标记为加载完成
+      if (img.complete) {
+        container.classList.add('loaded');
+      }
+      
+      // 桌面端：鼠标事件
+      if (!isMobile) {
+        initDesktopMagnifier(container, img);
+      } else {
+        // 移动端：触摸事件
+        initMobileMagnifier(container, img);
+      }
+    });
+    
+    // 绑定全屏预览关闭事件
+    initPreviewClose();
+  }
+  
+  /**
+   * 初始化桌面端放大镜功能
+   */
+  function initDesktopMagnifier(container, img) {
+    // 鼠标进入容器
+    container.addEventListener('mouseenter', function(e) {
+      // 更新当前活动容器和图片引用
+      currentContainer = container;
+      currentImg = img;
+      
+      // 设置放大窗口的背景图片
+      const imgSrc = img.getAttribute('data-magnifier-src') || img.src;
+      magnifierImage.style.backgroundImage = `url(${imgSrc})`;
+      magnifierImage.style.backgroundSize = `${zoomFactor * 100}%`;
+      
+      // 显示放大窗口
+      magnifierWindow.classList.add('show');
+      
+      // 移动放大窗口到鼠标位置
+      moveMagnifier(e);
+    });
+    
+    // 鼠标移动
+    container.addEventListener('mousemove', function(e) {
+      if (magnifierWindow.classList.contains('show') && currentContainer === container) {
+        moveMagnifier(e);
+      }
+    });
+    
+    // 鼠标离开
+    container.addEventListener('mouseleave', function() {
+      // 只有当离开的是当前活动容器时才隐藏
+      if (currentContainer === container) {
+        hideMagnifier();
+        currentContainer = null;
+        currentImg = null;
+      }
+    });
+  }
+  
+  /**
+   * 移动放大窗口到鼠标位置
+   */
+  function moveMagnifier(e) {
+    if (!currentContainer || !currentImg) return;
+    
+    // 获取容器相对于视口的位置
+    const rect = currentContainer.getBoundingClientRect();
+    
+    // 计算鼠标在图片上的相对位置（百分比）
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    
+    // 计算放大窗口的位置（鼠标右侧，避免超出屏幕）
+    let windowX = e.clientX + 15;
+    let windowY = e.clientY - windowSize / 2;
+    
+    // 边界检测：确保窗口不超出屏幕
+    if (windowX + windowSize > window.innerWidth) {
+      windowX = e.clientX - windowSize - 15;
+    }
+    if (windowY < 0) {
+      windowY = 0;
+    }
+    if (windowY + windowSize > window.innerHeight) {
+      windowY = window.innerHeight - windowSize;
+    }
+    
+    // 设置放大窗口位置
+    magnifierWindow.style.left = `${windowX}px`;
+    magnifierWindow.style.top = `${windowY}px`;
+    
+    // 设置放大区域（反向偏移，实现跟随效果）
+    const bgX = -x * (zoomFactor - 1) * 100;
+    const bgY = -y * (zoomFactor - 1) * 100;
+    magnifierImage.style.backgroundPosition = `${bgX}% ${bgY}%`;
+  }
+  
+  /**
+   * 初始化移动端放大镜功能（长按预览）
+   */
+  function initMobileMagnifier(container, img) {
+    // 触摸开始
+    container.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      
+      // 记录触摸开始时间
+      longPressTimer = setTimeout(function() {
+        // 长按触发全屏预览
+        openPreview(img.getAttribute('data-magnifier-src') || img.src);
+      }, longPressThreshold);
+    }, { passive: false });
+    
+    // 触摸移动（取消长按）
+    container.addEventListener('touchmove', function() {
+      clearTimeout(longPressTimer);
+    });
+    
+    // 触摸结束
+    container.addEventListener('touchend', function() {
+      clearTimeout(longPressTimer);
+    });
+  }
+  
+  /**
+   * 隐藏放大窗口
+   */
+  function hideMagnifier() {
+    magnifierWindow.classList.remove('show');
+  }
+  
+  /**
+   * 打开全屏预览
+   */
+  function openPreview(src) {
+    previewImg.src = src;
+    currentScale = 1;
+    previewImg.style.transform = 'scale(1)';
+    imagePreview.classList.add('show');
+    
+    // 阻止页面滚动
+    document.body.style.overflow = 'hidden';
+    
+    // 绑定双指缩放事件
+    initPinchZoom();
+  }
+  
+  /**
+   * 关闭全屏预览
+   */
+  function closePreview() {
+    imagePreview.classList.remove('show');
+    document.body.style.overflow = '';
+    
+    // 重置缩放
+    currentScale = 1;
+    previewImg.style.transform = 'scale(1)';
+  }
+  
+  /**
+   * 初始化全屏预览关闭事件
+   */
+  function initPreviewClose() {
+    // 点击关闭按钮
+    previewClose.addEventListener('click', closePreview);
+    
+    // 点击遮罩关闭
+    imagePreview.addEventListener('click', function(e) {
+      if (e.target === imagePreview) {
+        closePreview();
+      }
+    });
+    
+    // ESC键关闭
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && imagePreview.classList.contains('show')) {
+        closePreview();
+      }
+    });
+  }
+  
+  /**
+   * 初始化双指缩放功能
+   */
+  function initPinchZoom() {
+    let touches = [];
+    
+    imagePreview.addEventListener('touchstart', function(e) {
+      touches = e.touches;
+      
+      // 如果是双指触摸，计算初始距离
+      if (touches.length === 2) {
+        initialDistance = getDistance(touches[0], touches[1]);
+        initialScale = currentScale;
+      }
+    }, { passive: false });
+    
+    imagePreview.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+      touches = e.touches;
+      
+      // 双指缩放
+      if (touches.length === 2) {
+        const currentDistance = getDistance(touches[0], touches[1]);
+        const scale = initialScale * (currentDistance / initialDistance);
+        
+        // 限制缩放范围
+        currentScale = Math.max(1, Math.min(4, scale));
+        previewImg.style.transform = `scale(${currentScale})`;
+      }
+    }, { passive: false });
+  }
+  
+  /**
+   * 计算两个触摸点之间的距离
+   */
+  function getDistance(touch1, touch2) {
+    const dx = touch2.clientX - touch1.clientX;
+    const dy = touch2.clientY - touch1.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  
+  /**
+   * 初始化
+   */
+  document.addEventListener('DOMContentLoaded', function() {
+    initMagnifier();
+  });
+})();
+
+// ========== 新增功能 ==========
+
+/**
+ * 1. 汉堡菜单功能
+ */
+(function() {
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  
+  if (!hamburger || !navLinks) return;
+  
+  // 创建遮罩层
+  const overlay = document.createElement('div');
+  overlay.className = 'nav-overlay';
+  document.body.appendChild(overlay);
+  
+  function toggleMenu() {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+    overlay.classList.toggle('active');
+    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+  }
+  
+  hamburger.addEventListener('click', toggleMenu);
+  overlay.addEventListener('click', toggleMenu);
+  
+  // 点击导航链接后关闭菜单
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (navLinks.classList.contains('active')) {
+        toggleMenu();
+      }
+    });
+  });
+})();
+
+/**
+ * 2. 探索精品按钮事件绑定
+ */
+(function() {
+  const exploreBtn = document.getElementById('exploreBtn');
+  if (exploreBtn) {
+    exploreBtn.addEventListener('click', function() {
+      const gallery = document.getElementById('gallery');
+      if (gallery) {
+        gallery.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+})();
+
+/**
+ * 3. 联系表单提交处理
+ */
+(function() {
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const inputs = this.querySelectorAll('input, textarea');
+      const data = {};
+      inputs.forEach(input => {
+        data[input.placeholder] = input.value;
+      });
+      alert('感谢您的留言！我们会尽快与您联系。');
+      this.reset();
+    });
+  }
+})();
+</script>
+</body>
+</html>

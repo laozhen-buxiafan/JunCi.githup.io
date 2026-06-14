@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>钧瓷 - 窑变美学详情</title>
+<style>
+:root {
+  --bg-main: #0d0d18;
+  --bg-grad: linear-gradient(135deg, #0d0d18 0%, #1a1423 100%);
+  --text-white: #f8f8ff;
+  --text-gray: #c0c0d8;
+  --accent-red: #c41e3a;
+  --accent-gold: #d4a574;
+  --accent-blue: #4a7c9b;
+  --accent-grad: linear-gradient(90deg, #c41e3a, #d4a574);
+  --border: rgba(255,255,255,0.1);
+  --card-bg: rgba(255,255,255,0.05);
+  --nav-bg: rgba(13, 13, 24, 0.85);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg-grad);
+  color: var(--text-white);
+  line-height: 1.7;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+/* 星空背景 */
+#starCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 导航栏 */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--nav-bg);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  border-radius: 8px;
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-gray);
+  text-decoration: none;
+  font-size: 15px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-back:hover {
+  color: var(--text-white);
+  background: rgba(255,255,255,0.05);
+}
+
+.nav-back svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* 主容器 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 20px 60px;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 60px;
+  align-items: start;
+}
+
+/* 图片查看器 */
+.image-viewer {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: zoom-in;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-viewer img {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.image-viewer.zoomed {
+  cursor: zoom-out;
+}
+
+.image-viewer.zoomed img {
+  transform: scale(2);
+}
+
+/* 缩放提示 */
+.zoom-hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* 控制按钮 */
+.controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.control-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.control-btn:hover {
+  background: rgba(196, 30, 58, 0.6);
+  transform: scale(1.1);
+}
+
+.control-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* 信息面板 */
+.info-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px;
+}
+
+.info-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-header h1 {
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.info-header .subtitle {
+  color: var(--accent-gold);
+  font-size: 18px;
+  font-style: italic;
+}
+
+.info-description {
+  margin-bottom: 30px;
+}
+
+.info-description h3 {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--accent-gold);
+  margin-bottom: 16px;
+}
+
+.info-description p {
+  color: var(--text-gray);
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.info-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.meta-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.meta-item span:first-child {
+  color: var(--text-gray);
+}
+
+.meta-item span:last-child {
+  color: var(--text-white);
+}
+
+/* 缩略图列表 */
+.thumbnail-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid var(--border);
+}
+
+.thumbnail-item {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  background: var(--card-bg);
+}
+
+.thumbnail-item:hover {
+  border-color: rgba(212, 165, 116, 0.5);
+}
+
+.thumbnail-item.active {
+  border-color: var(--accent-gold);
+}
+
+.thumbnail-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 全屏预览 */
+.fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.fullscreen-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.fullscreen-overlay img {
+  max-width: 95%;
+  max-height: 95%;
+  object-fit: contain;
+}
+
+.fullscreen-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.fullscreen-close:hover {
+  background: rgba(196, 30, 58, 0.6);
+  transform: scale(1.1);
+}
+
+/* 响应式 */
+@media (max-width: 992px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .info-panel {
+    order: -1;
+  }
+  
+  .image-viewer {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav {
+    padding: 15px 20px;
+  }
+  
+  .container {
+    padding: 100px 20px 40px;
+  }
+  
+  .info-panel {
+    padding: 30px 20px;
+  }
+  
+  .info-header h1 {
+    font-size: 28px;
+  }
+  
+  .thumbnail-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+</style>
+</head>
+<body>
+<!-- 星空背景 -->
+<canvas id="starCanvas"></canvas>
+
+<!-- 导航栏 -->
+<nav class="nav">
+  <a href="001.html" class="nav-logo">钧瓷</a>
+  <a href="001.html#craftAesthetics" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    返回列表
+  </a>
+</nav>
+
+<!-- 主容器 -->
+<div class="container">
+  <!-- 图片查看器 -->
+  <div class="image-viewer" id="imageViewer">
+    <img src="" alt="" id="mainImage">
+    <div class="controls">
+      <button class="control-btn" id="zoomInBtn" title="放大">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/>
+        </svg>
+      </button>
+      <button class="control-btn" id="zoomOutBtn" title="缩小">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35M8 11h6"/>
+        </svg>
+      </button>
+      <button class="control-btn" id="fullscreenBtn" title="全屏">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+      </button>
+    </div>
+    <div class="zoom-hint">点击图片可放大，拖动查看细节</div>
+  </div>
+  
+  <!-- 信息面板 -->
+  <div class="info-panel">
+    <div class="info-header">
+      <h1 id="colorName">天青色</h1>
+      <p class="subtitle" id="colorDesc">雨过天青云破处</p>
+    </div>
+    
+    <div class="info-description">
+      <h3>色彩解读</h3>
+      <p id="colorStory">天青色是钧瓷中最具代表性的颜色之一，宛如雨后初晴的天空，清新淡雅。这种颜色的形成需要严格的烧制条件和精确的温度控制，是钧瓷窑变艺术的典型代表。</p>
+    </div>
+    
+    <div class="info-meta">
+      <div class="meta-item">
+        <span>烧制温度</span>
+        <span>1300°C 高温窑变</span>
+      </div>
+      <div class="meta-item">
+        <span>釉料成分</span>
+        <span>铜、铁、钛等金属氧化物</span>
+      </div>
+      <div class="meta-item">
+        <span>烧制难度</span>
+        <span>极高</span>
+      </div>
+      <div class="meta-item">
+        <span>存世数量</span>
+        <span>稀少</span>
+      </div>
+    </div>
+    
+    <div class="thumbnail-list" id="thumbnailList">
+      <!-- 缩略图由 JS 生成 -->
+    </div>
+  </div>
+</div>
+
+<!-- 全屏预览 -->
+<div class="fullscreen-overlay" id="fullscreenOverlay">
+  <button class="fullscreen-close" id="fullscreenClose">×</button>
+  <img src="" alt="" id="fullscreenImage">
+</div>
+
+<script>
+// 颜色数据
+const colorData = [
+  {
+    name: '天青色',
+    desc: '雨过天青云破处',
+    story: '天青色是钧瓷中最具代表性的颜色之一，宛如雨后初晴的天空，清新淡雅。这种颜色的形成需要严格的烧制条件和精确的温度控制，是钧瓷窑变艺术的典型代表。',
+    image: 'images/2.01.jpeg'
+  },
+  {
+    name: '月白色',
+    desc: '清辉如水月当空',
+    story: '月白色温润如玉，洁白中透着淡淡的蓝意，如同月光洒在湖面上的清辉。这种颜色极为难得，需要在特定的温度和气氛下才能形成。',
+    image: 'images/2.02.jpeg'
+  },
+  {
+    name: '玫瑰紫',
+    desc: '紫中带红艳若玫瑰',
+    story: '玫瑰紫是钧瓷中较为珍贵的颜色，其色调如同盛开的玫瑰，紫红交织，艳丽而不失优雅。这种颜色在高温下由铜的氧化物还原而成。',
+    image: 'images/2.03.jpeg'
+  },
+  {
+    name: '海棠红',
+    desc: '红艳如春晓海棠',
+    story: '海棠红色泽红艳，宛如春日海棠盛开时的娇媚。这种颜色层次丰富，在烧制过程中由于釉料的流动和氧化程度不同，会呈现出深浅不一的红色调。',
+    image: 'images/2.04.jpeg'
+  },
+  {
+    name: '茄皮紫',
+    desc: '紫中透青若茄皮',
+    story: '茄皮紫呈色沉稳大气，如同茄子皮般的深紫中透出青韵。这种颜色需要较高的烧制温度和特定的釉料配方，是钧瓷中的名贵品种。',
+    image: 'images/2.05.jpeg'
+  },
+  {
+    name: '鹦哥绿',
+    desc: '绿中闪黄若鹦羽',
+    story: '鹦哥绿是一种独特的黄绿色调，如同鹦鹉羽毛般鲜艳灵动。这种颜色的形成与釉料中的铁含量和烧制气氛密切相关。',
+    image: 'images/2.06.png'
+  },
+  {
+    name: '窑变彩',
+    desc: '彩霞漫天如画卷',
+    story: '窑变彩是钧瓷窑变艺术的最高境界，一件瓷器上同时呈现多种色彩，如同天边彩霞般绚烂。这种色彩无法人为控制，每一件都是独一无二的艺术珍品。',
+    image: 'images/2.07.jpeg'
+  },
+  {
+    name: '冰裂纹',
+    desc: '釉面开片若冰裂',
+    story: '冰裂纹是钧瓷釉面在冷却过程中由于胎釉膨胀系数不同而形成的自然裂纹，具有独特的审美价值。这种纹路疏密有致，如同冰面开裂的痕迹。',
+    image: 'images/2.08.jpeg'
+  }
+];
+
+// 获取 URL 参数
+const urlParams = new URLSearchParams(window.location.search);
+const colorIndex = parseInt(urlParams.get('color')) || 0;
+
+// 当前数据
+const currentColor = colorData[colorIndex];
+
+// 更新页面内容
+document.getElementById('colorName').textContent = currentColor.name;
+document.getElementById('colorDesc').textContent = currentColor.desc;
+document.getElementById('colorStory').textContent = currentColor.story;
+document.getElementById('mainImage').src = currentColor.image;
+document.getElementById('mainImage').alt = currentColor.name;
+document.title = `钧瓷 - ${currentColor.name}`;
+
+// 生成缩略图
+const thumbnailList = document.getElementById('thumbnailList');
+colorData.forEach((color, index) => {
+  const thumb = document.createElement('div');
+  thumb.className = `thumbnail-item ${index === colorIndex ? 'active' : ''}`;
+  thumb.innerHTML = `<img src="${color.image}" alt="${color.name}">`;
+  thumb.addEventListener('click', () => {
+    window.location.href = `detail.html?color=${index}`;
+  });
+  thumbnailList.appendChild(thumb);
+});
+
+// 星空动画
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  createStars();
+}
+
+function createStars() {
+  stars = [];
+  const count = Math.floor((canvas.width * canvas.height) / 8000);
+  for(let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.2 + 0.2,
+      speed: Math.random() * 0.15
+    });
+  }
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#fff';
+  stars.forEach(star => {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+    ctx.fill();
+    star.y += star.speed;
+    if(star.y > canvas.height) {
+      star.y = 0;
+      star.x = Math.random() * canvas.width;
+    }
+  });
+  requestAnimationFrame(drawStars);
+}
+
+resizeCanvas();
+drawStars();
+
+// 图片缩放功能
+const imageViewer = document.getElementById('imageViewer');
+const mainImage = document.getElementById('mainImage');
+let currentScale = 1;
+let isDragging = false;
+let startX, startY, translateX = 0, translateY = 0;
+
+imageViewer.addEventListener('click', (e) => {
+  if (e.target === imageViewer || e.target === mainImage) {
+    if (currentScale === 1) {
+      currentScale = 2;
+      imageViewer.classList.add('zoomed');
+    } else {
+      currentScale = 1;
+      translateX = 0;
+      translateY = 0;
+      imageViewer.classList.remove('zoomed');
+      mainImage.style.transform = 'scale(1)';
+    }
+  }
+});
+
+document.getElementById('zoomInBtn').addEventListener('click', () => {
+  currentScale = Math.min(currentScale + 0.5, 4);
+  mainImage.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+  imageViewer.classList.add('zoomed');
+});
+
+document.getElementById('zoomOutBtn').addEventListener('click', () => {
+  currentScale = Math.max(currentScale - 0.5, 1);
+  if (currentScale === 1) {
+    translateX = 0;
+    translateY = 0;
+    imageViewer.classList.remove('zoomed');
+  }
+  mainImage.style.transform = `scale(${currentScale})`;
+});
+
+// 拖动功能
+imageViewer.addEventListener('mousedown', (e) => {
+  if (currentScale > 1) {
+    isDragging = true;
+    startX = e.clientX - translateX;
+    startY = e.clientY - translateY;
+  }
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    translateX = e.clientX - startX;
+    translateY = e.clientY - startY;
+    mainImage.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+});
+
+// 全屏功能
+const fullscreenOverlay = document.getElementById('fullscreenOverlay');
+const fullscreenImage = document.getElementById('fullscreenImage');
+
+document.getElementById('fullscreenBtn').addEventListener('click', () => {
+  fullscreenImage.src = currentColor.image;
+  fullscreenOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+});
+
+document.getElementById('fullscreenClose').addEventListener('click', () => {
+  fullscreenOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+});
+
+fullscreenOverlay.addEventListener('click', (e) => {
+  if (e.target === fullscreenOverlay) {
+    fullscreenOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && fullscreenOverlay.classList.contains('active')) {
+    fullscreenOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
+
+// 双指缩放（移动端）
+let initialDistance = 0;
+let initialScale = 1;
+
+fullscreenOverlay.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 2) {
+    initialDistance = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    initialScale = currentScale;
+  }
+});
+
+fullscreenOverlay.addEventListener('touchmove', (e) => {
+  if (e.touches.length === 2) {
+    e.preventDefault();
+    const currentDistance = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    const scale = initialScale * (currentDistance / initialDistance);
+    currentScale = Math.max(1, Math.min(4, scale));
+    fullscreenImage.style.transform = `scale(${currentScale})`;
+  }
+}, { passive: false });
+</script>
+</body>
+</html>
