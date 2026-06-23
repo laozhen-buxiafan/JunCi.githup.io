@@ -40,6 +40,33 @@ body {
   overflow-x: hidden;
 }
 
+/* 莫奈油画像素背景 */
+#monetBg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Monet_-_Impression%2C_Sunrise.jpg/1280px-Monet_-_Impression%2C_Sunrise.jpg') center center / cover no-repeat;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  filter: contrast(1.05) saturate(1.1) brightness(0.95);
+  transform: scale(1.1);
+}
+
+/* 轻微叠加层 - 保证文字可读性 */
+#monetBg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(13, 13, 24, 0.08);
+}
+
 /* 星空画布 - 全屏底层 */
 #starCanvas {
   position: fixed;
@@ -61,26 +88,46 @@ body {
   justify-content: space-between;
   align-items: center;
   background: transparent;
-  transition: background 0.3s ease;
-  z-index: 10;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
 }
+
 .nav.active {
-  background: var(--nav-bg);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
+
 .nav-logo {
-  font-size: 24px;
-  font-weight: 500;
-  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-logo img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+.nav-logo span {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 2px;
   background: var(--accent-grad);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  padding: 8px 16px;
-  border: 1px solid rgba(212, 165, 116, 0.3);
-  border-radius: 8px;
-  position: relative;
 }
+
 .nav-logo::before {
   content: '';
   position: absolute;
@@ -88,44 +135,99 @@ body {
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: linear-gradient(135deg, rgba(196, 30, 58, 0.4), rgba(212, 165, 116, 0.4));
-  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.3), rgba(212, 165, 116, 0.3));
+  border-radius: 14px;
   z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: scale(0.95);
+}
+
+.nav-logo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 .nav-logo:hover::before {
   opacity: 1;
+  transform: scale(1);
 }
+
+.nav-logo:hover::after {
+  opacity: 1;
+}
+
+.nav-logo:hover {
+  transform: translateY(-2px);
+}
+
 .nav-links {
   display: flex;
   justify-content: center;
   align-items: center;
   flex: 1;
-  gap: 40px;
+  gap: 48px;
 }
+
 .nav-links a {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  padding: 8px 0;
+  padding: 10px 0;
+  font-size: 15px;
+  font-weight: 400;
 }
+
 .nav-links a::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 50%;
+  bottom: 2px;
+  left: 0;
   width: 0;
   height: 2px;
   background: var(--accent-grad);
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 1px;
 }
+
+.nav-links a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.15) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+  border-radius: 50%;
+}
+
 .nav-links a:hover {
   color: var(--text-white);
+  transform: translateY(-2px);
 }
+
 .nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links a:hover::before {
+  width: 80px;
+  height: 80px;
+}
+
+.nav-links a.active {
+  color: var(--accent-gold);
+}
+
+.nav-links a.active::after {
   width: 100%;
 }
 
@@ -138,23 +240,121 @@ body {
   align-items: center;
   text-align: center;
   padding: 0 20px;
+  position: relative;
+  overflow: hidden;
 }
+
+/* Hero 底部过渡分割 */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.5), transparent);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.15) 0%, rgba(196, 30, 58, 0.1) 50%, transparent 70%);
+  border-radius: 50%;
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 1;
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
 h1 {
-  font-size: 48px;
-  font-weight: 400;
-  letter-spacing: 1px;
-  margin-bottom: 16px;
+  font-size: clamp(48px, 8vw, 72px);
+  font-weight: 300;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  position: relative;
 }
+
+.hero-title-line {
+  display: block;
+  opacity: 0;
+  animation: slideInFromLeft 1s ease-out forwards;
+}
+
+.hero-title-line:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .hero-gradient-text {
   background: var(--accent-grad);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  position: relative;
 }
+
+.hero-gradient-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: blur(8px);
+  opacity: 0.5;
+}
+
 .hero p {
-  color: var(--text-gray);
-  font-size: 16px;
-  margin-bottom: 24px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(16px, 2.5vw, 20px);
+  margin-bottom: 32px;
+  max-width: 600px;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.6s forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 按钮 */
@@ -162,15 +362,41 @@ h1 {
   background: var(--accent-grad);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 12px 28px;
+  border-radius: 50px;
+  padding: 14px 40px;
   font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.9s forwards;
+  letter-spacing: 1px;
 }
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
 .btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(196, 30, 58, 0.5);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(196, 30, 58, 0.4), 0 0 0 1px rgba(212, 165, 116, 0.2);
+}
+
+.btn:active {
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* 内容区块 */
@@ -178,7 +404,76 @@ h1 {
   padding: 80px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
 }
+
+/* 区块分割装饰 */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.3), transparent);
+}
+
+/* Gallery 区块特殊分割 */
+#gallery::before {
+  width: 400px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.5), transparent);
+}
+
+#gallery::after {
+  content: '❖';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(212, 165, 116, 0.6);
+  font-size: 16px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  padding: 0 15px;
+}
+
+/* About 区块特殊分割 */
+#about::before {
+  width: 350px;
+  background: linear-gradient(90deg, transparent, rgba(196, 30, 58, 0.4), transparent);
+}
+
+#about::after {
+  content: '✧';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(196, 30, 58, 0.5);
+  font-size: 15px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  padding: 0 15px;
+}
+
+/* Contact 区块特殊分割 */
+#contact::before {
+  width: 350px;
+  background: linear-gradient(90deg, transparent, rgba(74, 124, 155, 0.4), transparent);
+}
+
+#contact::after {
+  content: '✉';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(74, 124, 155, 0.5);
+  font-size: 14px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  padding: 0 15px;
+}
+
 .section h2 {
   font-size: 28px;
   font-weight: 400;
@@ -192,15 +487,17 @@ h1 {
   gap: 24px;
 }
 .card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
-  border: 1px solid rgba(212, 165, 116, 0.2);
-  border-radius: 16px;
-  padding: 36px 30px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 40px 32px;
   width: 360px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(20px);
 }
+
 .card::before {
   content: '';
   position: absolute;
@@ -210,8 +507,11 @@ h1 {
   height: 3px;
   background: var(--accent-grad);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
+
 .card::after {
   content: '';
   position: absolute;
@@ -219,109 +519,217 @@ h1 {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(212, 165, 116, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle at 30% 30%, rgba(212, 165, 116, 0.15) 0%, rgba(196, 30, 58, 0.08) 40%, transparent 70%);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
   pointer-events: none;
 }
+
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(196, 30, 58, 0.15), 0 0 0 1px rgba(212, 165, 116, 0.3);
-  border-color: rgba(212, 165, 116, 0.4);
+  transform: translateY(-10px) rotateX(2deg);
+  box-shadow: 
+    0 25px 50px rgba(196, 30, 58, 0.2),
+    0 0 0 1px rgba(212, 165, 116, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(212, 165, 116, 0.5);
 }
+
 .card:hover::before {
   opacity: 1;
+  transform: scaleX(1);
 }
+
 .card:hover::after {
   opacity: 1;
 }
 .card-icon {
-  width: 56px;
-  height: 56px;
-  margin-bottom: 20px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 24px;
   background: linear-gradient(135deg, rgba(196, 30, 58, 0.15) 0%, rgba(212, 165, 116, 0.15) 100%);
-  border-radius: 12px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--accent-gold);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
+
+.card-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.3), rgba(196, 30, 58, 0.3));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
 .card-icon svg {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 8px rgba(212, 165, 116, 0.3));
 }
+
 .card:hover .card-icon {
-  transform: scale(1.1);
+  transform: scale(1.15) rotate(3deg);
   background: linear-gradient(135deg, rgba(196, 30, 58, 0.25) 0%, rgba(212, 165, 116, 0.25) 100%);
 }
+
+.card:hover .card-icon::before {
+  opacity: 1;
+}
+
 .card h3 {
-  font-size: 22px;
-  margin-bottom: 12px;
+  font-size: 24px;
+  margin-bottom: 16px;
   font-weight: 500;
   color: var(--text-white);
   position: relative;
   z-index: 1;
+  transition: color 0.3s ease;
 }
+
+.card:hover h3 {
+  color: var(--accent-gold);
+}
+
 .card p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 15px;
-  line-height: 1.7;
+  line-height: 1.8;
   position: relative;
   z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.card:hover p {
+  color: var(--text-white);
 }
 
 /* 图片展示卡片 */
 .gallery-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
   overflow: hidden;
   width: 380px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  backdrop-filter: blur(20px);
+  transform-style: preserve-3d;
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
+
+.gallery-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent-grad);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+}
+
 .gallery-card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 15px 40px rgba(196, 30, 58, 0.3);
+  transform: translateY(-12px) scale(1.02) rotateX(2deg);
+  box-shadow: 
+    0 25px 60px rgba(196, 30, 58, 0.25),
+    0 0 0 1px rgba(212, 165, 116, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border-color: rgba(212, 165, 116, 0.3);
 }
+
+.gallery-card:hover::before {
+  transform: scaleX(1);
+}
+
 .gallery-img-container {
   width: 100%;
   height: 380px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(13,13,24,0.5) 0%, rgba(26,20,35,0.5) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
   position: relative;
   overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-.gallery-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  padding: 20px;
-}
+
 .gallery-img-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(212, 165, 116, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.gallery-card:hover .gallery-img-container::before {
+  opacity: 1;
+}
+
+.gallery-img-container::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(ellipse at center, transparent 50%, var(--bg-main) 100%);
+  background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
   pointer-events: none;
 }
+
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  padding: 25px;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-card:hover .gallery-img {
+  transform: scale(1.05);
+}
+
 .gallery-info {
-  padding: 20px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
 }
+
 .gallery-info h3 {
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: 500;
   margin-bottom: 8px;
+  color: var(--text-white);
+  transition: color 0.3s ease;
 }
+
+.gallery-card:hover .gallery-info h3 {
+  color: var(--accent-gold);
+}
+
 .gallery-info p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.gallery-card:hover .gallery-info p {
+  color: var(--text-white);
 }
 
 /* 滚动渐入动画 */
@@ -339,10 +747,13 @@ h1 {
 footer {
   text-align: center;
   padding: 40px 20px;
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin-top: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 /* ========== 工艺文化专题页面样式 ========== */
@@ -359,15 +770,39 @@ footer {
   margin-top: 60px;
 }
 
+.craft-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.5), transparent);
+  z-index: 3;
+}
+
+.craft-banner::after {
+  content: '✦';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(212, 165, 116, 0.6);
+  font-size: 18px;
+  z-index: 3;
+  text-shadow: 0 0 10px rgba(212, 165, 116, 0.3);
+}
+
 .craft-banner-bg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 120%;
-  background: linear-gradient(135deg, rgba(13,13,24,0.7) 0%, rgba(26,20,35,0.8) 100%),
-              url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="craft" patternUnits="userSpaceOnUse" width="50" height="50"><circle cx="25" cy="25" r="1" fill="rgba(212,165,116,0.3)"/><circle cx="75" cy="75" r="1" fill="rgba(212,165,116,0.3)"/></pattern></defs><rect fill="url(%23craft)" width="100" height="100"/></svg>');
-  background-size: cover, 100px 100px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
   will-change: transform;
 }
 
@@ -396,7 +831,7 @@ footer {
 
 .craft-banner-desc {
   font-size: 18px;
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.8;
   margin-bottom: 30px;
 }
@@ -422,6 +857,30 @@ footer {
   padding: 100px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+}
+
+.craft-history::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.4), transparent);
+}
+
+.craft-history::after {
+  content: '◆';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(212, 165, 116, 0.5);
+  font-size: 14px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  padding: 0 15px;
 }
 
 .craft-history .section-header {
@@ -437,7 +896,7 @@ footer {
 }
 
 .craft-history .section-header p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 16px;
   max-width: 600px;
   margin: 0 auto;
@@ -493,7 +952,7 @@ footer {
 .img-placeholder span {
   font-size: 14px;
   margin-top: 10px;
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .craft-history-text h4 {
@@ -504,7 +963,7 @@ footer {
 }
 
 .craft-history-text p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 16px;
   line-height: 1.9;
   margin-bottom: 16px;
@@ -621,6 +1080,30 @@ footer {
 .craft-process {
   padding: 100px 20px;
   background: rgba(255,255,255,0.02);
+  position: relative;
+}
+
+.craft-process::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(196, 30, 58, 0.4), transparent);
+}
+
+.craft-process::after {
+  content: '◆';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(196, 30, 58, 0.5);
+  font-size: 14px;
+  background: rgba(255,255,255,0.02);
+  padding: 0 15px;
 }
 
 .craft-process .section-header {
@@ -636,7 +1119,7 @@ footer {
 }
 
 .craft-process .section-header p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 16px;
   max-width: 600px;
   margin: 0 auto;
@@ -706,7 +1189,7 @@ footer {
 }
 
 .process-card p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -805,7 +1288,7 @@ footer {
 
 .map-tooltip p {
   font-size: 13px;
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.6;
 }
 
@@ -814,6 +1297,30 @@ footer {
   padding: 100px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+}
+
+.craft-aesthetics::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.4), transparent);
+}
+
+.craft-aesthetics::after {
+  content: '◆';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(212, 165, 116, 0.5);
+  font-size: 14px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  padding: 0 15px;
 }
 
 .craft-aesthetics .section-header {
@@ -829,7 +1336,7 @@ footer {
 }
 
 .craft-aesthetics .section-header p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 16px;
   max-width: 700px;
   margin: 0 auto;
@@ -853,7 +1360,7 @@ footer {
 }
 
 .aesthetics-intro p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 15px;
   line-height: 1.8;
 }
@@ -1271,7 +1778,7 @@ footer {
 }
 
 .about-text p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 16px;
   line-height: 1.8;
   margin-bottom: 16px;
@@ -1351,7 +1858,7 @@ footer {
 }
 
 .value-item p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 14px;
   position: relative;
   z-index: 1;
@@ -1401,7 +1908,7 @@ footer {
 }
 
 .contact-item p {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 14px;
 }
 
@@ -1426,7 +1933,7 @@ footer {
 
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .contact-form input:focus,
@@ -1458,10 +1965,25 @@ footer {
 
 /* ========== 新版页脚样式 ========== */
 footer {
-  background: rgba(13, 13, 24, 0.95);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 60px 20px 30px;
-  margin-top: 60px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 80px 20px 30px;
+  margin-top: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 200px;
+  background: radial-gradient(ellipse at center, rgba(212, 165, 116, 0.12) 0%, transparent 70%);
 }
 
 .footer-content {
@@ -1469,48 +1991,102 @@ footer {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  gap: 40px;
-  padding-bottom: 40px;
+  gap: 60px;
+  padding-bottom: 50px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 1;
 }
 
 .footer-left {
   flex: 1;
-  max-width: 280px;
+  max-width: 320px;
 }
 
 .footer-logo {
-  font-size: 28px;
-  font-weight: 500;
-  letter-spacing: 2px;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 3px;
   background: var(--accent-grad);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
 }
 
-.footer-copyright {
-  color: var(--text-gray);
+.footer-logo::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 60%;
+  height: 2px;
+  background: var(--accent-grad);
+  border-radius: 1px;
+}
+
+.footer-desc {
+  color: rgba(255, 255, 255, 0.75);
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.8;
   margin-bottom: 24px;
+  opacity: 0.8;
+}
+
+.footer-social {
+  display: flex;
+  gap: 12px;
+}
+
+.footer-social a {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.75);
+  transition: all 0.3s ease;
+}
+
+.footer-social a:hover {
+  background: var(--accent-grad);
+  color: #fff;
+  transform: translateY(-3px);
+  border-color: transparent;
 }
 
 .footer-links {
   flex: 2;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
+  gap: 50px;
 }
 
 .footer-column h4 {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-white);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.footer-column h4::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: var(--accent-grad);
+  border-radius: 1px;
 }
 
 .footer-column ul {
@@ -1520,30 +2096,103 @@ footer {
 }
 
 .footer-column li {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .footer-column a {
-  color: var(--text-gray);
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
   font-size: 14px;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 4px 0;
+}
+
+.footer-column a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent-gold);
+  transition: width 0.3s ease;
 }
 
 .footer-column a:hover {
   color: var(--accent-gold);
+  padding-left: 8px;
+}
+
+.footer-column a:hover::before {
+  width: 100%;
 }
 
 .footer-bottom {
   max-width: 1200px;
   margin: 0 auto;
-  padding-top: 24px;
+  padding-top: 30px;
+  position: relative;
+  z-index: 1;
 }
 
-.footer-bottom p {
-  color: rgba(255, 255, 255, 0.4);
+.footer-bottom-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.footer-copyright {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+}
+
+.footer-copyright span {
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 500;
+}
+
+.footer-cert {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.footer-cert span {
   font-size: 12px;
-  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.footer-cert span:hover {
+  background: rgba(212, 165, 116, 0.15);
+  border-color: rgba(212, 165, 116, 0.3);
+  color: rgba(212, 165, 116, 0.8);
+}
+
+.footer-legal {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-legal a {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-legal a:hover {
+  color: var(--accent-gold);
 }
 
 @media (max-width: 992px) {
@@ -1586,12 +2235,16 @@ footer {
 </style>
 </head>
 <body>
+<div id="monetBg"></div>
 <!-- 星空背景画布 -->
 <canvas id="starCanvas"></canvas>
 
 <!-- 导航栏 -->
 <div class="nav">
-  <div class="nav-logo">钧瓷</div>
+  <div class="nav-logo">
+    <img src="images/Logo无背景.png" alt="钧瓷Logo">
+    <span>钧瓷</span>
+  </div>
   <div class="nav-links">
     <a href="#gallery">作品展示</a>
     <a href="#craftProcess">工艺传承</a>
@@ -1607,19 +2260,24 @@ footer {
 </div>
 
 <!-- 首屏 -->
-<div class="hero fade-item">
-  <h1>千年窑火<br><span class="hero-gradient-text">盛世瑰宝</span></h1>
-  <p>入窑一色，出窑万彩 · 钧瓷艺术典藏</p>
-  <button class="btn" id="exploreBtn">探索精品</button>
+<div class="hero">
+  <div class="hero-content">
+    <h1>
+      <span class="hero-title-line">千年窑火</span>
+      <span class="hero-title-line"><span class="hero-gradient-text" data-text="盛世瑰宝">盛世瑰宝</span></span>
+    </h1>
+    <p>入窑一色，出窑万彩 · 钧瓷艺术典藏</p>
+    <button class="btn" id="exploreBtn">探索精品</button>
+  </div>
 </div>
 
 <!-- 图片展示板块 -->
 <div class="section" id="gallery">
   <h2 class="fade-item">精品典藏</h2>
   <div class="card-wrap">
-    <div class="gallery-card fade-item">
+    <a href="product-detail.html?product=0" class="gallery-card fade-item">
       <div class="gallery-img-container magnifier-container">
-        <img class="gallery-img" src="images/01%20.png" alt="钧瓷作品-毛毛纹理" data-magnifier-src="images/01%20.png">
+        <img class="gallery-img" src="images/01 .png" alt="钧瓷作品-毛毛纹理" data-magnifier-src="images/01 .png">
         <div class="image-loading"></div>
         <div class="magnifier-hint">悬停查看细节</div>
       </div>
@@ -1627,8 +2285,8 @@ footer {
         <h3>毛毛</h3>
         <p>毛绒质感，温馨可爱</p>
       </div>
-    </div>
-    <div class="gallery-card fade-item">
+    </a>
+    <a href="product-detail.html?product=1" class="gallery-card fade-item">
       <div class="gallery-img-container magnifier-container">
         <img class="gallery-img" src="images/02.png" alt="钧瓷作品-精巧别致" data-magnifier-src="images/02.png">
         <div class="image-loading"></div>
@@ -1638,8 +2296,8 @@ footer {
         <h3>包包</h3>
         <p>精巧别致，匠心独运</p>
       </div>
-    </div>
-    <div class="gallery-card fade-item">
+    </a>
+    <a href="product-detail.html?product=2" class="gallery-card fade-item">
       <div class="gallery-img-container magnifier-container">
         <img class="gallery-img" src="images/03.png" alt="钧瓷作品-国色天香" data-magnifier-src="images/03.png">
         <div class="image-loading"></div>
@@ -1649,8 +2307,8 @@ footer {
         <h3>牡丹</h3>
         <p>国色天香，富贵吉祥</p>
       </div>
-    </div>
-    <div class="gallery-card fade-item">
+    </a>
+    <a href="product-detail.html?product=3" class="gallery-card fade-item">
       <div class="gallery-img-container magnifier-container">
         <img class="gallery-img" src="images/04.png" alt="钧瓷作品-色彩斑斓" data-magnifier-src="images/04.png">
         <div class="image-loading"></div>
@@ -1660,7 +2318,7 @@ footer {
         <h3>烩烩</h3>
         <p>色彩斑斓，浑然天成</p>
       </div>
-    </div>
+    </a>
   </div>
 </div>
 
@@ -1999,7 +2657,30 @@ footer {
   <div class="footer-content">
     <div class="footer-left">
       <div class="footer-logo">钧瓷</div>
-      <p class="footer-copyright">© 2026 钧瓷艺术典藏 版权所有</p>
+      <p class="footer-desc">传承千年窑火，品味入窑一色出窑万彩的钧瓷之美。致力于弘扬中华传统陶瓷文化。</p>
+      <div class="footer-social">
+        <a href="#" aria-label="微信">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+            <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c4.801 0 8.692-3.287 8.692-7.343 0-4.054-3.89-7.342-8.692-7.342z"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="微博">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+            <path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443z"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="抖音">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+          </svg>
+        </a>
+        <a href="#" aria-label="小红书">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+            <circle cx="12" cy="12" r="10"/>
+          </svg>
+        </a>
+      </div>
+      <p class="footer-copyright" style="display: none;">© 2026 钧瓷艺术典藏 版权所有</p>
     </div>
     
     <div class="footer-links">
@@ -2030,7 +2711,18 @@ footer {
   </div>
   
   <div class="footer-bottom">
-    <p>© 2026 钧瓷艺术典藏 | 豫ICP备XXXXXXXX号 | 豫公网安备XXXXXXXXXXX号 | 营业执照</p>
+    <div class="footer-bottom-content">
+      <div class="footer-copyright">© 2026 <span>钧瓷艺术典藏</span> 版权所有</div>
+      <div class="footer-cert">
+        <span>豫ICP备XXXXXXXX号</span>
+        <span>豫公网安备XXXXXXXXXXX号</span>
+      </div>
+      <div class="footer-legal">
+        <a href="#">隐私政策</a>
+        <a href="#">用户协议</a>
+        <a href="#">营业执照</a>
+      </div>
+    </div>
   </div>
 </footer>
 

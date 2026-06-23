@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>钧瓷 - 窑变美学详情</title>
+<title>钧瓷 - 作品详情</title>
 <style>
 :root {
   --bg-main: #0d0d18;
@@ -316,7 +316,7 @@ body {
   cursor: pointer;
   border: 2px solid transparent;
   transition: all 0.3s ease;
-  background: var(--card-bg);
+  background: rgba(255,255,255,0.05);
 }
 
 .thumbnail-item:hover {
@@ -436,7 +436,7 @@ body {
     <img src="images/Logo无背景.png" alt="钧瓷Logo">
     <span>钧瓷</span>
   </a>
-  <a href="index.html#craftAesthetics" class="nav-back">
+  <a href="index.html#gallery" class="nav-back">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M19 12H5M12 19l-7-7 7-7"/>
     </svg>
@@ -474,31 +474,31 @@ body {
   <!-- 信息面板 -->
   <div class="info-panel">
     <div class="info-header">
-      <h1 id="colorName">天青色</h1>
-      <p class="subtitle" id="colorDesc">雨过天青云破处</p>
+      <h1 id="productName">毛毛</h1>
+      <p class="subtitle" id="productDesc">毛绒质感，温馨可爱</p>
     </div>
     
     <div class="info-description">
-      <h3>色彩解读</h3>
-      <p id="colorStory">天青色是钧瓷中最具代表性的颜色之一，宛如雨后初晴的天空，清新淡雅。这种颜色的形成需要严格的烧制条件和精确的温度控制，是钧瓷窑变艺术的典型代表。</p>
+      <h3>作品介绍</h3>
+      <p id="productStory">这件钧瓷作品以其独特的毛绒质感而闻名，釉面呈现出细腻的纹理，如同柔软的绒毛一般。经过高温窑变，色彩自然流淌，形成了温暖而富有层次感的视觉效果。</p>
     </div>
     
     <div class="info-meta">
+      <div class="meta-item">
+        <span>作品名称</span>
+        <span id="metaName">毛毛</span>
+      </div>
+      <div class="meta-item">
+        <span>创作工艺</span>
+        <span>传统钧瓷手工技艺</span>
+      </div>
       <div class="meta-item">
         <span>烧制温度</span>
         <span>1300°C 高温窑变</span>
       </div>
       <div class="meta-item">
-        <span>釉料成分</span>
-        <span>铜、铁、钛等金属氧化物</span>
-      </div>
-      <div class="meta-item">
-        <span>烧制难度</span>
-        <span>极高</span>
-      </div>
-      <div class="meta-item">
-        <span>存世数量</span>
-        <span>稀少</span>
+        <span>艺术风格</span>
+        <span id="metaStyle">窑变艺术</span>
       </div>
     </div>
     
@@ -515,81 +515,63 @@ body {
 </div>
 
 <script>
-// 颜色数据
-const colorData = [
+// 作品数据
+const productData = [
   {
-    name: '天青色',
-    desc: '雨过天青云破处',
-    story: '天青色是钧瓷中最具代表性的颜色之一，宛如雨后初晴的天空，清新淡雅。这种颜色的形成需要严格的烧制条件和精确的温度控制，是钧瓷窑变艺术的典型代表。',
-    image: 'images/2.01.jpeg'
+    name: '毛毛',
+    desc: '毛绒质感，温馨可爱',
+    story: '这件钧瓷作品以其独特的毛绒质感而闻名，釉面呈现出细腻的纹理，如同柔软的绒毛一般。经过高温窑变，色彩自然流淌，形成了温暖而富有层次感的视觉效果。每一件作品都是独一无二的艺术品，展现了钧瓷窑变的神奇魅力。',
+    image: 'images/01 .png',
+    style: '窑变艺术'
   },
   {
-    name: '月白色',
-    desc: '清辉如水月当空',
-    story: '月白色温润如玉，洁白中透着淡淡的蓝意，如同月光洒在湖面上的清辉。这种颜色极为难得，需要在特定的温度和气氛下才能形成。',
-    image: 'images/2.02.jpeg'
+    name: '包包',
+    desc: '精巧别致，匠心独运',
+    story: '此件作品造型精巧别致，线条流畅优美。釉色温润如玉，在光线下呈现出变幻莫测的色彩层次。匠心独运的设计将传统钧瓷工艺与现代审美完美结合，是一件不可多得的艺术珍品。',
+    image: 'images/02.png',
+    style: '古典雅致'
   },
   {
-    name: '玫瑰紫',
-    desc: '紫中带红艳若玫瑰',
-    story: '玫瑰紫是钧瓷中较为珍贵的颜色，其色调如同盛开的玫瑰，紫红交织，艳丽而不失优雅。这种颜色在高温下由铜的氧化物还原而成。',
-    image: 'images/2.03.jpeg'
+    name: '牡丹',
+    desc: '国色天香，富贵吉祥',
+    story: '以牡丹花为设计灵感，这件钧瓷作品展现了"国色天香"的雍容华贵。釉面呈现出自然的窑变色彩，红中透紫，紫中带粉，如同盛开的牡丹花般娇艳动人。寓意富贵吉祥，是收藏与馈赠的佳品。',
+    image: 'images/03.png',
+    style: '富贵典雅'
   },
   {
-    name: '海棠红',
-    desc: '红艳如春晓海棠',
-    story: '海棠红色泽红艳，宛如春日海棠盛开时的娇媚。这种颜色层次丰富，在烧制过程中由于釉料的流动和氧化程度不同，会呈现出深浅不一的红色调。',
-    image: 'images/2.04.jpeg'
-  },
-  {
-    name: '茄皮紫',
-    desc: '紫中透青若茄皮',
-    story: '茄皮紫呈色沉稳大气，如同茄子皮般的深紫中透出青韵。这种颜色需要较高的烧制温度和特定的釉料配方，是钧瓷中的名贵品种。',
-    image: 'images/2.05.jpeg'
-  },
-  {
-    name: '鹦哥绿',
-    desc: '绿中闪黄若鹦羽',
-    story: '鹦哥绿是一种独特的黄绿色调，如同鹦鹉羽毛般鲜艳灵动。这种颜色的形成与釉料中的铁含量和烧制气氛密切相关。',
-    image: 'images/2.06.png'
-  },
-  {
-    name: '窑变彩',
-    desc: '彩霞漫天如画卷',
-    story: '窑变彩是钧瓷窑变艺术的最高境界，一件瓷器上同时呈现多种色彩，如同天边彩霞般绚烂。这种色彩无法人为控制，每一件都是独一无二的艺术珍品。',
-    image: 'images/2.07.jpeg'
-  },
-  {
-    name: '冰裂纹',
-    desc: '釉面开片若冰裂',
-    story: '冰裂纹是钧瓷釉面在冷却过程中由于胎釉膨胀系数不同而形成的自然裂纹，具有独特的审美价值。这种纹路疏密有致，如同冰面开裂的痕迹。',
-    image: 'images/2.08.jpeg'
+    name: '烩烩',
+    desc: '色彩斑斓，浑然天成',
+    story: '这件作品是钧瓷窑变艺术的杰出代表，多种色彩在高温下自然交融，形成了色彩斑斓的独特效果。红、紫、蓝、绿交织在一起，如同绚丽的画卷，展现了钧瓷"入窑一色，出窑万彩"的神奇魅力。',
+    image: 'images/04.png',
+    style: '绚丽多彩'
   }
 ];
 
 // 获取 URL 参数
 const urlParams = new URLSearchParams(window.location.search);
-const colorIndex = parseInt(urlParams.get('color')) || 0;
+const productIndex = parseInt(urlParams.get('product')) || 0;
 
 // 当前数据
-const currentColor = colorData[colorIndex];
+const currentProduct = productData[productIndex];
 
 // 更新页面内容
-document.getElementById('colorName').textContent = currentColor.name;
-document.getElementById('colorDesc').textContent = currentColor.desc;
-document.getElementById('colorStory').textContent = currentColor.story;
-document.getElementById('mainImage').src = currentColor.image;
-document.getElementById('mainImage').alt = currentColor.name;
-document.title = `钧瓷 - ${currentColor.name}`;
+document.getElementById('productName').textContent = currentProduct.name;
+document.getElementById('productDesc').textContent = currentProduct.desc;
+document.getElementById('productStory').textContent = currentProduct.story;
+document.getElementById('mainImage').src = currentProduct.image;
+document.getElementById('mainImage').alt = currentProduct.name;
+document.getElementById('metaName').textContent = currentProduct.name;
+document.getElementById('metaStyle').textContent = currentProduct.style;
+document.title = `钧瓷 - ${currentProduct.name}`;
 
 // 生成缩略图
 const thumbnailList = document.getElementById('thumbnailList');
-colorData.forEach((color, index) => {
+productData.forEach((product, index) => {
   const thumb = document.createElement('div');
-  thumb.className = `thumbnail-item ${index === colorIndex ? 'active' : ''}`;
-  thumb.innerHTML = `<img src="${color.image}" alt="${color.name}">`;
+  thumb.className = `thumbnail-item ${index === productIndex ? 'active' : ''}`;
+  thumb.innerHTML = `<img src="${product.image}" alt="${product.name}">`;
   thumb.addEventListener('click', () => {
-    window.location.href = `detail.html?color=${index}`;
+    window.location.href = `product-detail.html?product=${index}`;
   });
   thumbnailList.appendChild(thumb);
 });
@@ -636,6 +618,7 @@ function drawStars() {
 
 resizeCanvas();
 drawStars();
+window.addEventListener('resize', resizeCanvas);
 
 // 图片缩放功能
 const imageViewer = document.getElementById('imageViewer');
@@ -645,37 +628,18 @@ let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
 
 imageViewer.addEventListener('click', (e) => {
-  if (e.target === imageViewer || e.target === mainImage) {
-    if (currentScale === 1) {
-      currentScale = 2;
-      imageViewer.classList.add('zoomed');
-    } else {
-      currentScale = 1;
-      translateX = 0;
-      translateY = 0;
-      imageViewer.classList.remove('zoomed');
-      mainImage.style.transform = 'scale(1)';
-    }
-  }
-});
-
-document.getElementById('zoomInBtn').addEventListener('click', () => {
-  currentScale = Math.min(currentScale + 0.5, 4);
-  mainImage.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
-  imageViewer.classList.add('zoomed');
-});
-
-document.getElementById('zoomOutBtn').addEventListener('click', () => {
-  currentScale = Math.max(currentScale - 0.5, 1);
   if (currentScale === 1) {
+    currentScale = 2;
+    imageViewer.classList.add('zoomed');
+  } else {
+    currentScale = 1;
     translateX = 0;
     translateY = 0;
     imageViewer.classList.remove('zoomed');
+    mainImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
   }
-  mainImage.style.transform = `scale(${currentScale})`;
 });
 
-// 拖动功能
 imageViewer.addEventListener('mousedown', (e) => {
   if (currentScale > 1) {
     isDragging = true;
@@ -684,29 +648,56 @@ imageViewer.addEventListener('mousedown', (e) => {
   }
 });
 
-document.addEventListener('mousemove', (e) => {
+imageViewer.addEventListener('mousemove', (e) => {
   if (isDragging) {
     translateX = e.clientX - startX;
     translateY = e.clientY - startY;
-    mainImage.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+    mainImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
   }
 });
 
-document.addEventListener('mouseup', () => {
+imageViewer.addEventListener('mouseup', () => {
   isDragging = false;
+});
+
+imageViewer.addEventListener('mouseleave', () => {
+  isDragging = false;
+});
+
+// 缩放按钮
+document.getElementById('zoomInBtn').addEventListener('click', () => {
+  if (currentScale < 4) {
+    currentScale += 0.5;
+    mainImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
+    imageViewer.classList.add('zoomed');
+  }
+});
+
+document.getElementById('zoomOutBtn').addEventListener('click', () => {
+  if (currentScale > 1) {
+    currentScale -= 0.5;
+    mainImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
+    if (currentScale === 1) {
+      translateX = 0;
+      translateY = 0;
+      imageViewer.classList.remove('zoomed');
+      mainImage.style.transform = 'scale(1)';
+    }
+  }
 });
 
 // 全屏功能
 const fullscreenOverlay = document.getElementById('fullscreenOverlay');
 const fullscreenImage = document.getElementById('fullscreenImage');
+const fullscreenClose = document.getElementById('fullscreenClose');
 
 document.getElementById('fullscreenBtn').addEventListener('click', () => {
-  fullscreenImage.src = currentColor.image;
+  fullscreenImage.src = currentProduct.image;
   fullscreenOverlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 });
 
-document.getElementById('fullscreenClose').addEventListener('click', () => {
+fullscreenClose.addEventListener('click', () => {
   fullscreenOverlay.classList.remove('active');
   document.body.style.overflow = '';
 });
@@ -717,40 +708,6 @@ fullscreenOverlay.addEventListener('click', (e) => {
     document.body.style.overflow = '';
   }
 });
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && fullscreenOverlay.classList.contains('active')) {
-    fullscreenOverlay.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-});
-
-// 双指缩放（移动端）
-let initialDistance = 0;
-let initialScale = 1;
-
-fullscreenOverlay.addEventListener('touchstart', (e) => {
-  if (e.touches.length === 2) {
-    initialDistance = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    initialScale = currentScale;
-  }
-});
-
-fullscreenOverlay.addEventListener('touchmove', (e) => {
-  if (e.touches.length === 2) {
-    e.preventDefault();
-    const currentDistance = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    const scale = initialScale * (currentDistance / initialDistance);
-    currentScale = Math.max(1, Math.min(4, scale));
-    fullscreenImage.style.transform = `scale(${currentScale})`;
-  }
-}, { passive: false });
 </script>
 </body>
 </html>
